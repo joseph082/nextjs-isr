@@ -3,17 +3,17 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 function Job(props) {
+  // can destructure with function Job({})
   // props is the props object returned by getStaticProps
 
   const { title, description, created, posters } = props.job;
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-
   return (
     <ul>
       <li>Job Title: {title}</li>
       <li>Description: {description}</li>
-      <li>Date Created: {new Date(created).toDateString()}</li>
-      <li>Professors/Researchers: {JSON.stringify(posters.null, 2)}</li>
+      <li>Date Posted: {new Date(created).toDateString()}</li>
+      <li>Professors/Researchers: {JSON.stringify(posters)}</li>
     </ul>
   );
 }
@@ -26,9 +26,12 @@ export async function getStaticProps(context) {
   // console.log('getStaticProps');
   // console.log({ context });
 
-  const { id } = context.params;
+  // Can see how the object is formatted. It's based off of the schema
+  // console.log('All Jobs', await prisma.job.findMany());
+  // console.log('First Job', await prisma.job.findFirst());
+
   const specificJob = await prisma.job.findUnique({
-    where: { id: parseInt(id, 10) }, // database expects an integer
+    where: { id: parseInt(context.params.id, 10) }, // database expects an integer
     include: {
       posters: {
         select: {
@@ -45,14 +48,39 @@ export async function getStaticProps(context) {
       },
     },
   });
+  // console.log(JSON.stringify({ specificJob }, null, 2));
+  // {
+  //   "specificJob": {
+  //     "id": 1,
+  //     "created": "2022-12-19T05:59:31.761Z",
+  //     "closingDate": null,
+  //     "closed": false,
+  //     "title": "research title",
+  //     "description": "description",
+  //     "labId": "randomID",
+  //     "posters": [
+  //       {
+  //         "firstName": "first",
+  //         "lastName": "last",
+  //         "email": "firslast@ucla.edu"
+  //       }
+  //     ],
+  //     "lab": {
+  //       "name": "lab1",
+  //       "slug": "lab-1"
+  //     }
+  //   }
+  // }
 
-  // console.log({ specificJob });
-  specificJob.created = JSON.stringify(specificJob.created);
-  specificJob.created = specificJob.created.substring(1, specificJob.created.length - 1);
+  // specificJob.created = JSON.parse(JSON.stringify(specificJob.created)); // converts this from a Date to a String
+  // https://stackoverflow.com/questions/70449092/reason-object-object-date-cannot-be-serialized-as-json-please-only-ret
+
+  // specificJob.created = JSON.stringify(specificJob.created);
+  // specificJob.created = specificJob.created.substring(1, specificJob.created.length - 1);
 
   return {
     props: {
-      job: specificJob,
+      job: { ...specificJob, created: JSON.parse(JSON.stringify(specificJob.created)) },
     },
 
     // // Next.js will attempt to re-generate the page:
@@ -67,6 +95,8 @@ export async function getStaticProps(context) {
 // the path has not been generated.
 export async function getStaticPaths() {
   // console.log('getStaticPaths');
+
+  // prisma.table.function();
   const jobs = await prisma.job.findMany({
     select: { id: true },
   });
@@ -77,6 +107,7 @@ export async function getStaticPaths() {
     // The key inside params object must match the file/page name. if file is [pid].jsx,
     // the params object should be { pid: '1' }
 
+    // requery database in getStaticProps because can't keep result without storing in FS
     // params: { id: job.id.toString(10), job }, https://github.com/vercel/next.js/discussions/11272
   }));
 
