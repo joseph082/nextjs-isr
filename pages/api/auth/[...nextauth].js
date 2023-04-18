@@ -1,5 +1,4 @@
 import NextAuth from 'next-auth';
-import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 
 export const authOptions = {
@@ -9,22 +8,20 @@ export const authOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    }),
     // ...add more providers here
   ],
   callbacks: {
     async signIn({ account, profile, user }) {
       if (account.provider === 'google') {
         // console.log({ profile }, 'signIn');
+        const allowedEmails = process.env.ALLOWED_EMAILS.split(',');
         return (
           profile.email_verified &&
-          (profile.email.endsWith('@ucla.edu') || profile.email.endsWith('.ucla.edu'))
+          (profile.email.endsWith('@ucla.edu') || profile.email.endsWith('.ucla.edu')) &&
+          allowedEmails.includes(profile.email)
         );
       }
-      return true; // Do different verification for other providers that don't have `email_verified`
+      return false; // Do different verification for other providers that don't have `email_verified`
     },
   },
 };
