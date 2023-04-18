@@ -40,12 +40,6 @@ export async function getStaticProps(context) {
           email: true,
         },
       },
-      lab: {
-        select: {
-          name: true,
-          slug: true,
-        },
-      },
     },
   });
   // console.log(JSON.stringify({ specificJob }, null, 2));
