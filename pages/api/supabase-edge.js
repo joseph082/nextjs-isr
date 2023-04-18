@@ -10,13 +10,11 @@ export const config = {
 export default async function handler(req) {
   // return res.status(200).send(await supabase.storage.from('pdfs').list(''));
   const { data, error } = await supabase.from('Job').select();
-  return new Response(
-    JSON.stringify({ pdfs: await supabase.storage.from('pdfs').list(''), data }, null, 2),
-    {
-      status: 200,
-      headers: {
-        'content-type': 'application/json',
-      },
-    }
-  );
+  // const pdfs = { pdfs: await supabase.storage.from('pdfs').list('') };
+  return new Response(JSON.stringify({ data }, null, 2), {
+    status: 200,
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
 }

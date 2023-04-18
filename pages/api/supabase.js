@@ -8,5 +8,6 @@ const supabase = createClient(process.env.SUPABASE_DATABASE_URL, process.env.SUP
 // };
 
 export default async function handler(req, res) {
-  return res.status(200).send(await supabase.storage.from('pdfs').list(''));
+  const { data, error } = await supabase.from('Job').select();
+  return res.status(200).send(JSON.stringify({ data }, null, 2));
 }
