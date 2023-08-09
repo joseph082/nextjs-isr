@@ -1,7 +1,15 @@
 {
-  "git": {
-    "deploymentEnabled": {
-      "main": false
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "regions": ["sfo1"],
+  "crons": [
+    {
+      "path": "/api/supabase-edge",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/supabase-edge-west",
+      "schedule": "0 0 * * *"
     }
-  }
+  ]
 }
