@@ -27,19 +27,16 @@ function parseUrl(url) {
 }
 
 export async function middleware(req, options, onSuccess) {
-  // https://github.com/orgs/vercel/discussions/1734
-  const requestHeaders = new Headers(req.headers);
-  console.log(requestHeaders.get('Authorization'));
-  console.log(requestHeaders.get('authorization'));
-  if (
-    (requestHeaders.get('Authorization') || requestHeaders.get('authorization')) ===
-    `Bearer ${process.env.CRON_SECRET}`
-  ) {
-    return;
-  }
-  // if (req.headers.authorization)
-
   const { pathname, search, origin, basePath } = req.nextUrl;
+
+  const cronJobPaths = ['/api/supabase-edge', '/api/supabase-edge-west'];
+  if (cronJobPaths.includes(pathname)) {
+    // https://github.com/orgs/vercel/discussions/1734
+    const requestHeaders = new Headers(req.headers);
+    if (requestHeaders.get('Authorization') === `Bearer ${process.env.CRON_SECRET}`) {
+      return; // Vercel cron job
+    }
+  }
 
   const signInPage = options?.pages?.signIn ?? '/api/auth/signin';
   const errorPage = options?.pages?.error ?? '/api/auth/error';
