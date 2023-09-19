@@ -23,7 +23,6 @@ updates:
         patterns:
           - 'prisma'
           - '@prisma/client'
-    groups:
       next:
         patterns:
           - 'next'
