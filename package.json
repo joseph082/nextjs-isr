@@ -10,7 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "5.3.1",
+    "@prisma/client": "5.4.1",
     "@supabase/supabase-js": "2.34.0",
     "dompurify": "3.0.5",
     "eslint": "8.27.0",
@@ -30,7 +30,7 @@
     "lint-staged": "13.0.3",
     "postcss": "8.4.19",
     "prettier": "2.7.1",
-    "prisma": "5.3.1",
+    "prisma": "5.4.1",
     "tailwindcss": "3.3.2"
   },
   "lint-staged": {
