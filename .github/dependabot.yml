@@ -7,17 +7,17 @@ updates:
     schedule:
       # `daily` = checks the npm registry for updates every weekday
       interval: 'daily'
-    allow:
-      # Allow updates for these packages
-      - dependency-name: 'prisma'
-      - dependency-name: '@prisma/client'
-      - dependency-name: '@supabase/supabase-js'
-      - dependency-name: 'next'
-      - dependency-name: 'eslint-config-next'
-      - dependency-name: 'next-auth'
-      - dependency-name: 'dompurify'
-      - dependency-name: 'jsdom'
-      - dependency-name: 'react-quill'
+    # allow:
+    # Allow updates for these packages
+    # - dependency-name: 'prisma'
+    # - dependency-name: '@prisma/client'
+    # - dependency-name: '@supabase/supabase-js'
+    # - dependency-name: 'next'
+    # - dependency-name: 'eslint-config-next'
+    # - dependency-name: 'next-auth'
+    # - dependency-name: 'dompurify'
+    # - dependency-name: 'jsdom'
+    # - dependency-name: 'react-quill'
     groups:
       prisma:
         patterns:
