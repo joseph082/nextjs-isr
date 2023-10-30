@@ -24,17 +24,18 @@ export default function Home(props) {
     await fetch(routes[index].path);
     setFetching((f) => f.map((isFetching, i) => (i === index ? false : isFetching)));
   }
-  const hostLength = props.host.length;
+  // const originRef = useRef();
   const lastRowRef = useRef();
 
   useEffect(() => {
+    // originRef.current = window.location.origin;
     const observer = new PerformanceObserver((list) => {
       list.getEntries().forEach((entry, index) => {
         console.log(entry);
 
         if (
-          !entry.name.startsWith(`${props.host}/api/supabase`) &&
-          entry.name !== `${props.host}/api/prisma`
+          !entry.name.startsWith(`${window.location.origin}/api/supabase`) &&
+          entry.name !== `${window.location.origin}/api/prisma`
         ) {
           return;
         }
@@ -42,7 +43,7 @@ export default function Home(props) {
           ...ft,
           {
             duration: entry.duration,
-            route: entry.name.substring(hostLength),
+            route: entry.name.substring(window.location.origin.length),
             key: `${entry.fetchStart},${index}`,
           },
         ]);
@@ -81,13 +82,15 @@ export default function Home(props) {
         <table>
           <thead className="sticky top-0 bg-white">
             <tr>
-              <th className="w-52 sticky">Route</th> <th className="w-40">Duration (ms)</th>
+              <th className="w-52 sticky">Route</th>
+              <th className="w-40">Duration (ms)</th>
             </tr>
           </thead>
           <tbody>
             {fetchTimes.map(({ route, duration }, i) => (
               <tr key={route} {...(i === fetchTimes.length - 1 && { ref: lastRowRef })}>
-                <td>{route}</td> <td>{duration.toFixed(2)}</td>
+                <td>{route}</td>
+                <td>{duration.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -100,7 +103,6 @@ export default function Home(props) {
 export async function getStaticProps() {
   return {
     props: {
-      host: process.env.NEXTAUTH_URL ?? `https://${process.env.VERCEL_URL}`,
       buildDate: new Date().toString(), // will be passed to the page component as props
     },
   };
