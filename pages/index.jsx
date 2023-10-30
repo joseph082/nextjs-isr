@@ -100,7 +100,7 @@ export default function Home(props) {
 export async function getStaticProps() {
   return {
     props: {
-      host: process.env.NEXTAUTH_URL,
+      host: process.env.NEXTAUTH_URL ?? `https://${process.env.VERCEL_URL}`,
       buildDate: new Date().toString(), // will be passed to the page component as props
     },
   };
