@@ -11,7 +11,7 @@ export default function Home(props) {
     { path: '/api/prisma', label: 'West (Prisma Lambda)' },
   ];
   const [fetching, setFetching] = useState(new Array(routes.length).fill(false));
-  const [fetchTimes, setFetchTimes] = useState([]);
+  const [fetchTimes, setFetchTimes] = useState([])
   async function logFetch(index) {
     // console.log({ index });
     if (fetching[index]) {
