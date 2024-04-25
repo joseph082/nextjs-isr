@@ -23,7 +23,7 @@
     "react-quill": "2.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "10.4.16",
+    "autoprefixer": "10.4.19",
     "eslint-config-prettier": "9.0.0",
     "husky": "8.0.3",
     "lint-staged": "15.2.2",
